@@ -1,3 +1,5 @@
+# WIP
+
 # Laravel Model Settings
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orkhanahmadov/laravel-model-settings.svg?style=flat-square)](https://packagist.org/packages/orkhanahmadov/laravel-model-settings)
@@ -46,7 +48,3 @@ If you discover any security related issues, please email hey@orkhan.dev instead
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
