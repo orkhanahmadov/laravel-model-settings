@@ -14,4 +14,18 @@ class TestCase extends \Orchestra\Testbench\TestCase
             ModelSettingsServiceProvider::class,
         ];
     }
+
+    protected function setUpDatabase()
+    {
+        include_once __DIR__ . '/../database/migrations/model_settings_table.php.stub';
+        (new \CreateModelSettingsTable())->up();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->setUpDatabase();
+//        $this->withFactories(__DIR__ . '/../database/factories');
+    }
 }

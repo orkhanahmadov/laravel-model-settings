@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
+
+class CreateModelSettingsTable extends Migration
+{
+    public function up(): void
+    {
+        Schema::create(config('model-settings.table_name'), function (Blueprint $table) {
+            $table->id();
+            $table->morphs('model');
+            $table->string('type');
+            $table->string('key')->index();
+            $table->text('value')->nullable();
+            $table->timestamps();
+            $table->unique(['model_type', 'model_id', 'key']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists(config('model-settings.table_name'));
+    }
+}
