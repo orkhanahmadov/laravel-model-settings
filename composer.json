@@ -1,0 +1,56 @@
+{
+    "name": "orkhanahmadov/laravel-model-settings",
+    "description": "Laravel Model Settings",
+    "keywords": [
+        "orkhanahmadov",
+        "laravel-model-settings"
+    ],
+    "homepage": "https://github.com/orkhanahmadov/laravel-model-settings",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Orkhan Ahmadov",
+            "email": "hey@orkhan.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/database": "^8.0|^9.0",
+        "illuminate/support": "^8.0|^9.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.8",
+        "nunomaduro/larastan": "^2.1",
+        "orchestra/testbench": "^6.0|^7.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Orkhanahmadov\\ModelSettings\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Orkhanahmadov\\ModelSettings\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "cs-fixer": "./vendor/bin/php-cs-fixer fix --verbose --config=.php-cs-fixer.php",
+        "phpstan": "./vendor/bin/phpstan analyse"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ModelSettingsServiceProvider"
+            ]
+        }
+    }
+}

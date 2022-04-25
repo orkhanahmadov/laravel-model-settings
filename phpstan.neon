@@ -1,0 +1,27 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    level: 8
+
+    tmpDir: storage/framework/cache/phpstan
+
+    universalObjectCratesClasses:
+        - Illuminate\Routing\Route
+
+    ignoreErrors:
+         -
+             message: '#Unable to resolve the template type T#'
+             paths:
+                 - app/*
+        # -
+        #    message: '#expects resource, resource\|false given#'
+        #    paths:
+        #        - tests/*
+        # - '#should return \$this#'
+
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
