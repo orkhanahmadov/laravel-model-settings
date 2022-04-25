@@ -1,10 +1,14 @@
-name: phpstan
+name: PHPStan
 
 on:
     push:
-        branches: [master]
+      paths:
+          - '**.php'
+          - 'phpstan.neon'
     pull_request:
-        branches: [master]
+        paths:
+          - '**.php'
+          - 'phpstan.neon'
 
 jobs:
     phpstan:

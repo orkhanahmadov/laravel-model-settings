@@ -1,10 +1,6 @@
-name: cs-fixer
+name: "Check & fix styling"
 
-on:
-    push:
-        branches: [master]
-    pull_request:
-        branches: [master]
+on: [push]
 
 jobs:
     cs-fixer:
