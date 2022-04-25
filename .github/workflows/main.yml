@@ -42,7 +42,7 @@ jobs:
               run: vendor/bin/phpunit
 
     phpstan:
-        name: Static analysis (phpstan)
+        name: Static analysis
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -63,7 +63,7 @@ jobs:
               run: composer phpstan
 
     cs-fixer:
-        name: Code style (php-cs-fixer)
+        name: Code style fixer
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
