@@ -9,7 +9,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orkhanahmadov\ModelSettings\Models\Setting;
 
-/** @mixin \Illuminate\Database\Eloquent\Model */
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait HasSettings
 {
     public function settings(): MorphMany

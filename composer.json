@@ -38,7 +38,6 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "fix": "./vendor/bin/php-cs-fixer fix --verbose --config=.php-cs-fixer.php",
         "phpstan": "./vendor/bin/phpstan analyse"
     },
