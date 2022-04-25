@@ -13,12 +13,9 @@ jobs:
             fail-fast: true
             matrix:
                 os: [ubuntu-latest, windows-latest]
-                php: [7.4, 8.0]
-                laravel: [8.*]
+                php: [8.0, 8.1]
+                laravel: [8.*, 9.*]
                 stability: [prefer-lowest, prefer-stable]
-                include:
-                    - laravel: 8.*
-                      testbench: ^6.6
 
         name: Unit test - P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -50,8 +47,6 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
-            - name: Add Composer auth credentials
-              run: echo '${{ secrets.COMPOSER_AUTH }}' > $GITHUB_WORKSPACE/auth.json
             - name: Cache Composer dependencies
               uses: actions/cache@v1
               with:
@@ -73,6 +68,11 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+            - name: Cache Composer dependencies
+              uses: actions/cache@v1
+              with:
+                path: vendor
+                key: composer-${{ hashFiles('composer.lock') }}
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:

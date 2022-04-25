@@ -1,4 +1,4 @@
-# Very short description of the package
+# Laravel Model Settings
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orkhanahmadov/laravel-model-settings.svg?style=flat-square)](https://packagist.org/packages/orkhanahmadov/laravel-model-settings)
 [![Total Downloads](https://img.shields.io/packagist/dt/orkhanahmadov/laravel-model-settings.svg?style=flat-square)](https://packagist.org/packages/orkhanahmadov/laravel-model-settings)
