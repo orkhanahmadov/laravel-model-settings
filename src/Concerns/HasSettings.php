@@ -46,10 +46,6 @@ trait HasSettings
 
     public function updateSetting(string $key, mixed $value): void
     {
-        if (! $this->settingNeedsUpdate($key, $value)) {
-            return;
-        }
-
         $defaultSetting = $this->getDefaultSetting($key);
 
         $this->settings()->updateOrCreate(
