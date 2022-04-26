@@ -44,11 +44,11 @@ trait HasSettings
         return $this->hasDatabaseSetting($key);
     }
 
-    public function updateSetting(string $key, mixed $value): void
+    public function updateSetting(string $key, mixed $value): Setting
     {
         $defaultSetting = $this->getDefaultSetting($key);
 
-        $this->settings()->updateOrCreate(
+        return $this->settings()->updateOrCreate(
             ['type' => $defaultSetting['type'], 'key' => $key],
             ['value' => $value?->value ?? $value] // todo: test
         );
