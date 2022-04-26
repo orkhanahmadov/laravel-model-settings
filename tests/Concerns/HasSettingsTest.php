@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Orkhanahmadov\ModelSettings\Concerns\HasSettings;
 use Orkhanahmadov\ModelSettings\Enums\Type;
+use Orkhanahmadov\ModelSettings\Exceptions\InvalidSettingKey;
 use Orkhanahmadov\ModelSettings\Models\Setting;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
 
@@ -24,10 +25,25 @@ class HasSettingsTest extends TestCase
         $this->assertInstanceOf(MorphMany::class, $this->model->settings());
     }
 
-    public function testIsValidSettingKey(): void
+    public function testIsValidSettingKeyThrowsExceptionForInvalidKey(): void
     {
-        $this->assertTrue(HasSettingsFakeModel::isValidSettingKey('setting_key'));
-        $this->assertFalse(HasSettingsFakeModel::isValidSettingKey('invalid_setting_key'));
+        $this->expectException(InvalidSettingKey::class);
+
+        HasSettingsFakeModel::isValidSettingKey('invalid_setting_key');
+    }
+
+    public function testHasSettingInDatabase(): void
+    {
+        $setting = new Setting();
+        $setting->model_type = HasSettingsFakeModel::class;
+        $setting->model_id = 1;
+        $setting->key = 'setting_key';
+        $setting->type = Type::INT;
+        $setting->value = 1;
+        $setting->save();
+
+        $this->assertTrue($this->model->hasSettingInDatabase('setting_key'));
+        $this->assertFalse($this->model->hasSettingInDatabase('setting_key_2'));
     }
 
     public function testSettingNeedsUpdate(): void

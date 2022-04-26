@@ -7,6 +7,7 @@ namespace Orkhanahmadov\ModelSettings\Concerns;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Orkhanahmadov\ModelSettings\Exceptions\InvalidSettingKey;
 use Orkhanahmadov\ModelSettings\Models\Setting;
 
 /**
@@ -24,13 +25,22 @@ trait HasSettings
         return [];
     }
 
-    public static function isValidSettingKey(string $key): bool
+    public static function isValidSettingKey(string $key): void
     {
-        return array_key_exists($key, static::defaultSettings());
+        throw_unless(array_key_exists($key, static::defaultSettings()), new InvalidSettingKey());
     }
 
-    protected function getDefaultSetting(string $key): array
+    public function hasSettingInDatabase(string $key): bool
     {
+        static::isValidSettingKey($key);
+
+        return $this->settings()->where(compact('key'))->exists();
+    }
+
+    protected static function getDefaultSetting(string $key): array
+    {
+        static::isValidSettingKey($key);
+
         return static::defaultSettings()[$key] ?? [];
     }
 
@@ -40,11 +50,7 @@ trait HasSettings
             return true;
         }
 
-        if ($this->settings()->where('key', $key)->exists()) {
-            return true;
-        }
-
-        return false;
+        return $this->hasSettingInDatabase($key);
     }
 
     public function updateSetting(string $key, mixed $value): Setting
@@ -59,7 +65,7 @@ trait HasSettings
 
     public function deleteSetting(string $key): int
     {
-        return $this->settings()->where('key', $key)->delete();
+        return $this->settings()->where(compact('key'))->delete();
     }
 
     public function getSetting(string $identifier): ?array
