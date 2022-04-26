@@ -58,7 +58,7 @@ trait HasSettings
     {
         throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
 
-        return static::defaultSettings()[$key] ?? [];
+        return static::defaultSettings()[$key];
     }
 
     public function deleteSetting(string $key): int
