@@ -1,6 +1,6 @@
 {
     "name": "orkhanahmadov/laravel-model-settings",
-    "description": "Laravel Model Settings",
+    "description": "Laravel model settings for Eloquent",
     "keywords": [
         "orkhanahmadov",
         "laravel-model-settings"
