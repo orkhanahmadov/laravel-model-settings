@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 0.0.5 - 2022-04-26
+
+Test release
+
 ## 0.0.4 - 2022-04-26
 
 Test release
