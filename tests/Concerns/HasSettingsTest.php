@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Orkhanahmadov\ModelSettings\Tests\Concerns;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 use Orkhanahmadov\ModelSettings\Concerns\HasSettings;
 use Orkhanahmadov\ModelSettings\Enums\Type;
 use Orkhanahmadov\ModelSettings\Models\Setting;

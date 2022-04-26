@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Orkhanahmadov\ModelSettings\Tests\Models;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orkhanahmadov\ModelSettings\Enums\Type;
 use Orkhanahmadov\ModelSettings\Models\Setting;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
 use ValueError;
 
