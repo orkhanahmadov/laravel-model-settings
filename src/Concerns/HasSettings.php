@@ -30,16 +30,9 @@ trait HasSettings
         return array_key_exists($key, static::defaultSettings());
     }
 
-    public function hasSettingInDatabase(string $key): bool
+    public function hasDatabaseSetting(string $key): bool
     {
         return $this->settings()->where(compact('key'))->exists();
-    }
-
-    protected static function getDefaultSetting(string $key): array
-    {
-        throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
-
-        return static::defaultSettings()[$key] ?? [];
     }
 
     public function settingNeedsUpdate(string $key, mixed $value): bool
@@ -48,7 +41,7 @@ trait HasSettings
             return true;
         }
 
-        return $this->hasSettingInDatabase($key);
+        return $this->hasDatabaseSetting($key);
     }
 
     public function updateSetting(string $key, mixed $value): Setting
@@ -59,6 +52,13 @@ trait HasSettings
             ['type' => $defaultSetting['type'], 'key' => $key],
             ['value' => $value?->value ?? $value] // todo: test
         );
+    }
+
+    protected static function getDefaultSetting(string $key): array
+    {
+        throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
+
+        return static::defaultSettings()[$key] ?? [];
     }
 
     public function deleteSetting(string $key): int

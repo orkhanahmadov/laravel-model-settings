@@ -30,7 +30,7 @@ class HasSettingsTest extends TestCase
         $this->assertFalse(HasSettingsFakeModel::isValidSettingKey('invalid_setting_key'));
     }
 
-    public function testHasSettingInDatabase(): void
+    public function testHasDatabaseSetting(): void
     {
         $setting = new Setting();
         $setting->model_type = HasSettingsFakeModel::class;
@@ -40,8 +40,8 @@ class HasSettingsTest extends TestCase
         $setting->value = 1;
         $setting->save();
 
-        $this->assertTrue($this->model->hasSettingInDatabase('setting_key'));
-        $this->assertFalse($this->model->hasSettingInDatabase('setting_key_2'));
+        $this->assertTrue($this->model->hasDatabaseSetting('setting_key'));
+        $this->assertFalse($this->model->hasDatabaseSetting('setting_key_2'));
     }
 
     public function testSettingNeedsUpdate(): void
