@@ -25,21 +25,19 @@ trait HasSettings
         return [];
     }
 
-    public static function isValidSettingKey(string $key): void
+    public static function isValidSettingKey(string $key): bool
     {
-        throw_unless(array_key_exists($key, static::defaultSettings()), new InvalidSettingKey());
+        return array_key_exists($key, static::defaultSettings());
     }
 
     public function hasSettingInDatabase(string $key): bool
     {
-        static::isValidSettingKey($key);
-
         return $this->settings()->where(compact('key'))->exists();
     }
 
     protected static function getDefaultSetting(string $key): array
     {
-        static::isValidSettingKey($key);
+        throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
 
         return static::defaultSettings()[$key] ?? [];
     }

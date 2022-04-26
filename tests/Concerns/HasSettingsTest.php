@@ -27,9 +27,8 @@ class HasSettingsTest extends TestCase
 
     public function testIsValidSettingKeyThrowsExceptionForInvalidKey(): void
     {
-        $this->expectException(InvalidSettingKey::class);
-
-        HasSettingsFakeModel::isValidSettingKey('invalid_setting_key');
+        $this->assertTrue(HasSettingsFakeModel::isValidSettingKey('setting_key'));
+        $this->assertFalse(HasSettingsFakeModel::isValidSettingKey('invalid_setting_key'));
     }
 
     public function testHasSettingInDatabase(): void
