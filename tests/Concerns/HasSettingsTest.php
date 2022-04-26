@@ -10,7 +10,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Orkhanahmadov\ModelSettings\Concerns\HasSettings;
 use Orkhanahmadov\ModelSettings\Enums\Type;
-use Orkhanahmadov\ModelSettings\Exceptions\InvalidSettingKey;
 use Orkhanahmadov\ModelSettings\Models\Setting;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
 
