@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Orkhanahmadov\ModelSettings\Exceptions\InvalidSettingKey;
-use Orkhanahmadov\ModelSettings\Models\Setting;
+use Orkhanahmadov\ModelSettings\Models\SettingModel;
+use Orkhanahmadov\ModelSettings\Setting;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Model
@@ -17,7 +18,7 @@ trait HasSettings
 {
     public function settings(): MorphMany
     {
-        return $this->morphMany(Setting::class, 'model');
+        return $this->morphMany(SettingModel::class, 'model');
     }
 
     protected static function defaultSettings(): array
@@ -48,10 +49,17 @@ trait HasSettings
     {
         $defaultSetting = $this->getDefaultSetting($key);
 
-        return $this->settings()->updateOrCreate(
+        if (! $this->settingNeedsUpdate($key, $value)) {
+            return Setting::fromDefault($key, $defaultSetting);
+        }
+
+        /** @var SettingModel $model */
+        $model = $this->settings()->updateOrCreate(
             ['type' => $defaultSetting['type'], 'key' => $key],
-            ['value' => $value?->value ?? $value] // todo: test
+            ['value' => $value?->value ?? $value]
         );
+
+        return Setting::fromModel($model);
     }
 
     protected static function getDefaultSetting(string $key): array
@@ -61,40 +69,42 @@ trait HasSettings
         return static::defaultSettings()[$key];
     }
 
-    public function deleteSetting(string $key): int
+    public function deleteSetting(string $key): void
     {
-        return $this->settings()->where(compact('key'))->delete();
+        throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
+
+        $this->settings()->where(compact('key'))->delete();
     }
 
-    public function getSetting(string $identifier): ?array
+    public function getSetting(string $key): Setting
     {
-        return $this->all_settings->first(fn (array $setting, string $key) => $key === $identifier);
+        throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
+
+        return $this->all_settings->first(fn (array $setting, string $settingKey) => $settingKey === $key);
     }
 
-    public function getSettingValue(string $identifier, string $nestedKeys = ''): mixed
+    public function getSettingValue(string $key, ?string $nestedValueKeys = null): mixed
     {
-        return Arr::get(
-            $this->getSetting($identifier) ?? [],
-            'value' . (! empty($nestedKeys) ? ".$nestedKeys" : '')
-        );
+        $value = $this->getSetting($key)->getValue();
+
+        if (is_null($nestedValueKeys)) {
+            return $value;
+        }
+
+        return Arr::get($value, $nestedValueKeys);
     }
 
     public function getAllSettingsAttribute(): Collection
     {
         return Collection::make(static::defaultSettings())
-            ->merge(
-                $this->settings->mapWithKeys(
-                    fn (Setting $setting) => [$setting->key => $setting->only(['type', 'value'])]
-                )
-            )
-            ->map(fn (array $setting) => [
-                ...$setting,
-                'type' => $setting['type']->value,
-            ]);
+            ->merge($this->settings->mapWithKeys(fn (SettingModel $setting) => [
+                $setting->key => $setting->only(['type', 'value']),
+            ]))
+            ->map(fn (array $setting, string $key) => Setting::fromDefault($key, $setting));
     }
 
-    public function getMappedSettingsAttribute(): Collection
-    {
-        return $this->all_settings->map(fn (array $setting) => $setting['value']);
-    }
+//    public function getMappedSettingsAttribute(): Collection
+//    {
+//        return $this->all_settings->map(fn (Setting $setting) => $setting->getValue());
+//    }
 }

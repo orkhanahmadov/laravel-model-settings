@@ -7,7 +7,7 @@ namespace Orkhanahmadov\ModelSettings\Models;
 use Illuminate\Database\Eloquent\Model;
 use Orkhanahmadov\ModelSettings\Enums\Type;
 
-class Setting extends Model
+class SettingModel extends Model
 {
     protected $table = 'model_settings';
 

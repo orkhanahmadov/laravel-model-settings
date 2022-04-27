@@ -10,7 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Orkhanahmadov\ModelSettings\Concerns\HasSettings;
 use Orkhanahmadov\ModelSettings\Enums\Type;
-use Orkhanahmadov\ModelSettings\Models\Setting;
+use Orkhanahmadov\ModelSettings\Exceptions\InvalidSettingKey;
+use Orkhanahmadov\ModelSettings\Models\SettingModel;
+use Orkhanahmadov\ModelSettings\Setting;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
 
 class HasSettingsTest extends TestCase
@@ -19,12 +21,12 @@ class HasSettingsTest extends TestCase
 
     protected HasSettingsFakeModel $model;
 
-    public function testMorphManyToSettings(): void
+    public function testMorphsManySettings(): void
     {
         $this->assertInstanceOf(MorphMany::class, $this->model->settings());
     }
 
-    public function testIsValidSettingKeyThrowsExceptionForInvalidKey(): void
+    public function testIsValidSettingKey(): void
     {
         $this->assertTrue(HasSettingsFakeModel::isValidSettingKey('setting_key'));
         $this->assertFalse(HasSettingsFakeModel::isValidSettingKey('invalid_setting_key'));
@@ -32,7 +34,7 @@ class HasSettingsTest extends TestCase
 
     public function testHasDatabaseSetting(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key';
@@ -46,7 +48,7 @@ class HasSettingsTest extends TestCase
 
     public function testSettingNeedsUpdate(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key_2';
@@ -59,23 +61,82 @@ class HasSettingsTest extends TestCase
         $this->assertTrue($this->model->settingNeedsUpdate('setting_key_2', 123));
     }
 
-    public function testUpdateSettingCreatesNewSetting(): void
+    public function testUpdateSettingReturnsDefaultSettingIfUpdateIsNotNeeded(): void
     {
-        $this->assertNull(Setting::first());
+        $result = $this->model->updateSetting('setting_key', 'abc');
 
-        $this->model->updateSetting('setting_key', 'abc');
-
-        $this->assertNotNull($setting = Setting::first());
-        $this->assertSame(HasSettingsFakeModel::class, $setting->model_type);
-        $this->assertSame(1, $setting->model_id);
-        $this->assertSame('setting_key', $setting->key);
-        $this->assertSame(Type::STRING->value, $setting->type->value);
-        $this->assertSame('abc', $setting->value);
+        $this->assertInstanceOf(Setting::class, $result);
+        $this->assertSame(Type::STRING, $result->getType());
+        $this->assertSame('setting_key', $result->getKey());
+        $this->assertSame('abc', $result->getValue());
+        $this->assertCount(0, SettingModel::get());
     }
 
-    public function testGetSetting(): void
+    public function testUpdateSettingCreatesNewSettingModel(): void
     {
-        $setting = new Setting();
+        $result = $this->model->updateSetting('setting_key', 'zyx');
+
+        $this->assertInstanceOf(Setting::class, $result);
+        $this->assertNotNull($model = SettingModel::first());
+        $this->assertSame(HasSettingsFakeModel::class, $model->model_type);
+        $this->assertSame(1, $model->model_id);
+        $this->assertSame($model->type, $result->getType());
+        $this->assertSame($model->key, $result->getKey());
+        $this->assertSame($model->value, $result->getValue());
+        $this->assertCount(1, SettingModel::get());
+    }
+
+    public function testUpdateSettingUpdatesExistingSettingModel(): void
+    {
+        $this->model->updateSetting('setting_key', 'zyx');
+        $result = $this->model->updateSetting('setting_key', 'qwe');
+
+        $this->assertInstanceOf(Setting::class, $result);
+        $this->assertNotNull($model = SettingModel::first());
+        $this->assertSame($model->type, $result->getType());
+        $this->assertSame($model->key, $result->getKey());
+        $this->assertSame($model->value, $result->getValue());
+        $this->assertCount(1, SettingModel::get());
+    }
+
+    public function testDeleteSettingThrowsExceptionIfInvalidKeyIsPassed(): void
+    {
+        $this->expectException(InvalidSettingKey::class);
+
+        $this->model->deleteSetting('invalid_setting_key');
+    }
+
+    public function testDeleteSettingDeletesSettingModel(): void
+    {
+        $setting = new SettingModel();
+        $setting->model_type = HasSettingsFakeModel::class;
+        $setting->model_id = 1;
+        $setting->key = 'setting_key';
+        $setting->type = Type::STRING;
+        $setting->value = 'zyx';
+        $setting->save();
+
+        $this->assertNotNull($setting->fresh());
+        $this->model->deleteSetting('setting_key');
+        $this->assertNull($setting->fresh());
+    }
+
+    public function testGetSettingThrowsExceptionIfInvalidKeyIsPassed(): void
+    {
+        $this->expectException(InvalidSettingKey::class);
+
+        $this->model->getSetting('invalid_setting_key');
+    }
+
+
+
+
+
+
+
+    public function testGetSettingReturns(): void
+    {
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key';
@@ -90,7 +151,7 @@ class HasSettingsTest extends TestCase
 
     public function testGetSettingValue(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key';
@@ -105,7 +166,7 @@ class HasSettingsTest extends TestCase
 
     public function testUpdateSettingUpdatesExistingSetting(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key';
@@ -115,13 +176,13 @@ class HasSettingsTest extends TestCase
 
         $this->model->updateSetting('setting_key', 'zyx');
 
-        $this->assertCount(1, Setting::get());
-        $this->assertSame('zyx', Setting::first()->value);
+        $this->assertCount(1, SettingModel::get());
+        $this->assertSame('zyx', SettingModel::first()->value);
     }
 
     public function testAllSettingsAttribute(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key';
@@ -137,7 +198,7 @@ class HasSettingsTest extends TestCase
 
     public function testMappedSettingsAttribute(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
         $setting->model_id = 1;
         $setting->key = 'setting_key';
@@ -149,20 +210,6 @@ class HasSettingsTest extends TestCase
         $this->assertCount(2, $mappedSettings);
         $this->assertSame('zyx', $mappedSettings['setting_key']);
         $this->assertSame(123, $mappedSettings['setting_key_2']);
-    }
-
-    public function testDeleteSetting(): void
-    {
-        $setting = new Setting();
-        $setting->model_type = HasSettingsFakeModel::class;
-        $setting->model_id = 1;
-        $setting->key = 'setting_key';
-        $setting->type = Type::STRING;
-        $setting->value = 'zyx';
-        $setting->save();
-
-        $this->model->deleteSetting('setting_key');
-        $this->assertNull($setting->fresh());
     }
 
     protected function setUp(): void

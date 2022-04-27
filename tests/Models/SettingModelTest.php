@@ -6,17 +6,17 @@ namespace Orkhanahmadov\ModelSettings\Tests\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orkhanahmadov\ModelSettings\Enums\Type;
-use Orkhanahmadov\ModelSettings\Models\Setting;
+use Orkhanahmadov\ModelSettings\Models\SettingModel;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
 use ValueError;
 
-class SettingTest extends TestCase
+class SettingModelTest extends TestCase
 {
     use RefreshDatabase;
 
     public function testIntCast(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -30,7 +30,7 @@ class SettingTest extends TestCase
 
     public function testStringCast(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -44,7 +44,7 @@ class SettingTest extends TestCase
 
     public function testJsonCastFromArray(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -58,7 +58,7 @@ class SettingTest extends TestCase
 
     public function testJsonCastFromJson(): void
     {
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -74,7 +74,7 @@ class SettingTest extends TestCase
     {
         $this->expectException(ValueError::class);
 
-        $setting = new Setting();
+        $setting = new SettingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
