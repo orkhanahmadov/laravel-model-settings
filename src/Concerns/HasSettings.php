@@ -85,7 +85,7 @@ trait HasSettings
 
     public function getSettingValue(string $key, ?string $nestedValueKeys = null): mixed
     {
-        $value = $this->getSetting($key)->getValue();
+        $value = $this->getSetting($key)->value;
 
         if (is_null($nestedValueKeys)) {
             return $value;
@@ -105,6 +105,6 @@ trait HasSettings
 
 //    public function getMappedSettingsAttribute(): Collection
 //    {
-//        return $this->all_settings->map(fn (Setting $setting) => $setting->getValue());
+//        return $this->all_settings->map(fn (Setting $setting) => $setting->value);
 //    }
 }

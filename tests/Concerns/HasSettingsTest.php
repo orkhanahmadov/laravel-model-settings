@@ -66,9 +66,9 @@ class HasSettingsTest extends TestCase
         $result = $this->model->updateSetting('setting_key', 'abc');
 
         $this->assertInstanceOf(Setting::class, $result);
-        $this->assertSame(Type::STRING, $result->getType());
-        $this->assertSame('setting_key', $result->getKey());
-        $this->assertSame('abc', $result->getValue());
+        $this->assertSame(Type::STRING, $result->type);
+        $this->assertSame('setting_key', $result->key);
+        $this->assertSame('abc', $result->value);
         $this->assertCount(0, SettingModel::get());
     }
 
@@ -80,9 +80,9 @@ class HasSettingsTest extends TestCase
         $this->assertNotNull($model = SettingModel::first());
         $this->assertSame(HasSettingsFakeModel::class, $model->model_type);
         $this->assertSame(1, $model->model_id);
-        $this->assertSame($model->type, $result->getType());
-        $this->assertSame($model->key, $result->getKey());
-        $this->assertSame($model->value, $result->getValue());
+        $this->assertSame($model->type, $result->type);
+        $this->assertSame($model->key, $result->key);
+        $this->assertSame($model->value, $result->value);
         $this->assertCount(1, SettingModel::get());
     }
 
@@ -93,9 +93,9 @@ class HasSettingsTest extends TestCase
 
         $this->assertInstanceOf(Setting::class, $result);
         $this->assertNotNull($model = SettingModel::first());
-        $this->assertSame($model->type, $result->getType());
-        $this->assertSame($model->key, $result->getKey());
-        $this->assertSame($model->value, $result->getValue());
+        $this->assertSame($model->type, $result->type);
+        $this->assertSame($model->key, $result->key);
+        $this->assertSame($model->value, $result->value);
         $this->assertCount(1, SettingModel::get());
     }
 

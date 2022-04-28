@@ -10,9 +10,9 @@ use Orkhanahmadov\ModelSettings\Models\SettingModel;
 class Setting
 {
     public function __construct(
-        protected Type $type,
-        protected string $key,
-        protected mixed $value,
+        public readonly Type $type,
+        public readonly string $key,
+        public readonly mixed $value,
     ) {
     }
 
@@ -24,20 +24,5 @@ class Setting
     public static function fromModel(SettingModel $model): self
     {
         return new self(...$model->only(['type', 'key', 'value']));
-    }
-
-    public function getType(): Type
-    {
-        return $this->type;
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    public function getValue(): mixed
-    {
-        return $this->value;
     }
 }
