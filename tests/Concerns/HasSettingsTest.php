@@ -128,59 +128,25 @@ class HasSettingsTest extends TestCase
         $this->model->getSetting('invalid_setting_key');
     }
 
-
-
-
-
-
-
-    public function testGetSettingReturns(): void
+    public function testGetSettingReturnsMatchingSettingWithKey(): void
     {
-        $setting = new SettingModel();
-        $setting->model_type = HasSettingsFakeModel::class;
-        $setting->model_id = 1;
-        $setting->key = 'setting_key';
-        $setting->type = Type::STRING;
-        $setting->value = 'zyx';
-        $setting->save();
-
-        $this->assertSame(['type' => Type::STRING->value, 'value' => 'zyx'], $this->model->getSetting('setting_key'));
-        $this->assertSame(['type' => Type::INT->value, 'value' => 123], $this->model->getSetting('setting_key_2'));
-        $this->assertNull($this->model->getSetting('not_existing_setting_key'));
+        $this->assertInstanceOf(Setting::class, $setting = $this->model->getSetting('setting_key'));
+        $this->assertSame(Type::STRING, $setting->type);
+        $this->assertSame('setting_key', $setting->key);
+        $this->assertSame('abc', $setting->value);
     }
 
-    public function testGetSettingValue(): void
+    public function testGetSettingValueReturnsValueForSetting(): void
     {
-        $setting = new SettingModel();
-        $setting->model_type = HasSettingsFakeModel::class;
-        $setting->model_id = 1;
-        $setting->key = 'setting_key';
-        $setting->type = Type::STRING;
-        $setting->value = 'zyx';
-        $setting->save();
-
-        $this->assertSame('zyx', $this->model->getSettingValue('setting_key'));
-        $this->assertSame(123, $this->model->getSettingValue('setting_key_2'));
-        $this->assertNull($this->model->getSettingValue('not_existing_setting_key'));
+        $this->assertSame('abc', $this->model->getSettingValue('setting_key'));
     }
 
-    public function testUpdateSettingUpdatesExistingSetting(): void
+    public function testGetSettingValueReturnsValueForNestedArray(): void
     {
-        $setting = new SettingModel();
-        $setting->model_type = HasSettingsFakeModel::class;
-        $setting->model_id = 1;
-        $setting->key = 'setting_key';
-        $setting->type = Type::STRING;
-        $setting->value = 'abc';
-        $setting->save();
-
-        $this->model->updateSetting('setting_key', 'zyx');
-
-        $this->assertCount(1, SettingModel::get());
-        $this->assertSame('zyx', SettingModel::first()->value);
+        $this->assertSame('qwe', $this->model->getSettingValue('setting_key_3', 'nested'));
     }
 
-    public function testAllSettingsAttribute(): void
+    public function testAllSettingsAttributeMergesDefaultAndDatabaseSettings(): void
     {
         $setting = new SettingModel();
         $setting->model_type = HasSettingsFakeModel::class;
@@ -191,25 +157,10 @@ class HasSettingsTest extends TestCase
         $setting->save();
 
         $this->assertInstanceOf(Collection::class, $allSettings = $this->model->all_settings);
-        $this->assertCount(2, $allSettings);
-        $this->assertSame('zyx', $allSettings->get('setting_key')['value']);
-        $this->assertSame(123, $allSettings->get('setting_key_2')['value']);
-    }
-
-    public function testMappedSettingsAttribute(): void
-    {
-        $setting = new SettingModel();
-        $setting->model_type = HasSettingsFakeModel::class;
-        $setting->model_id = 1;
-        $setting->key = 'setting_key';
-        $setting->type = Type::STRING;
-        $setting->value = 'zyx';
-        $setting->save();
-
-        $this->assertInstanceOf(Collection::class, $mappedSettings = $this->model->mapped_settings);
-        $this->assertCount(2, $mappedSettings);
-        $this->assertSame('zyx', $mappedSettings['setting_key']);
-        $this->assertSame(123, $mappedSettings['setting_key_2']);
+        $this->assertCount(3, $allSettings);
+        $this->assertSame('zyx', $allSettings->get('setting_key')->value);
+        $this->assertSame(123, $allSettings->get('setting_key_2')->value);
+        $this->assertSame(['nested' => 'qwe'], $allSettings->get('setting_key_3')->value);
     }
 
     protected function setUp(): void
@@ -230,6 +181,7 @@ class HasSettingsFakeModel extends Model
         return [
             'setting_key' => ['type' => Type::STRING, 'value' => 'abc'],
             'setting_key_2' => ['type' => Type::INT, 'value' => 123],
+            'setting_key_3' => ['type' => Type::ARRAY, 'value' => ['nested' => 'qwe']],
         ];
     }
 }

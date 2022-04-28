@@ -80,7 +80,7 @@ trait HasSettings
     {
         throw_unless(static::isValidSettingKey($key), new InvalidSettingKey());
 
-        return $this->all_settings->first(fn (array $setting, string $settingKey) => $settingKey === $key);
+        return $this->all_settings->first(fn (Setting $setting, string $settingKey) => $settingKey === $key);
     }
 
     public function getSettingValue(string $key, ?string $nestedValueKeys = null): mixed
@@ -102,9 +102,4 @@ trait HasSettings
             ]))
             ->map(fn (array $setting, string $key) => Setting::fromDefault($key, $setting));
     }
-
-//    public function getMappedSettingsAttribute(): Collection
-//    {
-//        return $this->all_settings->map(fn (Setting $setting) => $setting->value);
-//    }
 }
