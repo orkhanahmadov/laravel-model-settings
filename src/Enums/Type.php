@@ -10,4 +10,5 @@ enum Type: string
     case INT = 'int';
     case JSON = 'json';
     case ARRAY = 'array';
+    case BOOLEAN = 'bool';
 }

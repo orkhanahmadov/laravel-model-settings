@@ -42,6 +42,29 @@ class SettingModelTest extends TestCase
         $this->assertSame(1, $setting->getRawOriginal('value'));
     }
 
+    public function testBooleanCast(): void
+    {
+        $true = new SettingModel();
+        $true->model_type = 'whatever';
+        $true->model_id = 1;
+        $true->key = 'true';
+        $true->type = Type::BOOLEAN;
+        $true->value = '1';
+        $true->save();
+        $this->assertTrue($true->value);
+        $this->assertSame('1', $true->getRawOriginal('value'));
+
+        $false = new SettingModel();
+        $false->model_type = 'whatever';
+        $false->model_id = 1;
+        $false->key = 'false';
+        $false->type = Type::BOOLEAN;
+        $false->value = '0';
+        $false->save();
+        $this->assertFalse($false->value);
+        $this->assertSame('0', $false->getRawOriginal('value'));
+    }
+
     public function testJsonCastFromArray(): void
     {
         $setting = new SettingModel();
