@@ -26,6 +26,5 @@ class TestCase extends \Orchestra\Testbench\TestCase
         parent::setUp();
 
         $this->setUpDatabase();
-//        $this->withFactories(__DIR__ . '/../database/factories');
     }
 }

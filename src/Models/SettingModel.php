@@ -21,14 +21,15 @@ class SettingModel extends Model
         'type' => Type::class,
     ];
 
-    public function getCasts()
+    public function getCasts(): array
     {
-        if (isset($this->attributes['type'])) {
-            return array_merge(parent::getCasts(), [
-                'value' => $this->attributes['type'],
-            ]);
+        if (! isset($this->attributes['type'])) {
+            return parent::getCasts();
         }
 
-        return parent::getCasts();
+        return [
+            ...parent::getCasts(),
+            'value' => $this->attributes['type'],
+        ];
     }
 }

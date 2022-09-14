@@ -16,6 +16,11 @@ use Orkhanahmadov\ModelSettings\Setting;
  */
 trait HasSettings
 {
+    public static function bootHasSettings(): void
+    {
+        static::deleting(fn (self $model) => $model->settings()->delete());
+    }
+
     public function settings(): MorphMany
     {
         return $this->morphMany(SettingModel::class, 'model');

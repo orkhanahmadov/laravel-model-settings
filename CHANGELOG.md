@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 1.2.0 - 2022-09-14
+
+- Settings getting deleted once model it relates to gets deleted
+
 ## 1.1.0 - 2022-09-12
 
 - `BOOLEAN` type support
