@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 1.3.0 - 2022-09-14
+
+- Enabled custom Eloquent Model usage
+
 ## 1.2.1 - 2022-09-14
 
 - Fixed `deleting` event handling

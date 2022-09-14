@@ -6,7 +6,6 @@ namespace Orkhanahmadov\ModelSettings\Tests\Models;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orkhanahmadov\ModelSettings\Enums\Type;
-use Orkhanahmadov\ModelSettings\Models\SettingModel;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
 use ValueError;
 
@@ -16,7 +15,7 @@ class SettingModelTest extends TestCase
 
     public function testIntCast(): void
     {
-        $setting = new SettingModel();
+        $setting = new $this->settingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -30,7 +29,7 @@ class SettingModelTest extends TestCase
 
     public function testStringCast(): void
     {
-        $setting = new SettingModel();
+        $setting = new $this->settingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -44,7 +43,7 @@ class SettingModelTest extends TestCase
 
     public function testBooleanCast(): void
     {
-        $true = new SettingModel();
+        $true = new $this->settingModel();
         $true->model_type = 'whatever';
         $true->model_id = 1;
         $true->key = 'true';
@@ -54,7 +53,7 @@ class SettingModelTest extends TestCase
         $this->assertTrue($true->value);
         $this->assertSame('1', $true->getRawOriginal('value'));
 
-        $false = new SettingModel();
+        $false = new $this->settingModel();
         $false->model_type = 'whatever';
         $false->model_id = 1;
         $false->key = 'false';
@@ -67,7 +66,7 @@ class SettingModelTest extends TestCase
 
     public function testJsonCastFromArray(): void
     {
-        $setting = new SettingModel();
+        $setting = new $this->settingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -81,7 +80,7 @@ class SettingModelTest extends TestCase
 
     public function testJsonCastFromJson(): void
     {
-        $setting = new SettingModel();
+        $setting = new $this->settingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';
@@ -97,7 +96,7 @@ class SettingModelTest extends TestCase
     {
         $this->expectException(ValueError::class);
 
-        $setting = new SettingModel();
+        $setting = new $this->settingModel();
         $setting->model_type = 'whatever';
         $setting->model_id = 1;
         $setting->key = 'whatever';

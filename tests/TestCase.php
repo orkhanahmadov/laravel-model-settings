@@ -8,6 +8,8 @@ use Orkhanahmadov\ModelSettings\ModelSettingsServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
+    protected string $settingModel;
+
     protected function getPackageProviders($app)
     {
         return [
@@ -24,6 +26,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->settingModel = config('model-settings.model');
 
         $this->setUpDatabase();
     }

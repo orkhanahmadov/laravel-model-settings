@@ -25,7 +25,7 @@ trait HasSettings
 
     public function settings(): MorphMany
     {
-        return $this->morphMany(SettingModel::class, 'model');
+        return $this->morphMany(config('model-settings.model'), 'model');
     }
 
     protected static function defaultSettings(): array
