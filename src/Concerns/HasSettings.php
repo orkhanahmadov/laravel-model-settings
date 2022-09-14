@@ -18,7 +18,9 @@ trait HasSettings
 {
     public static function bootHasSettings(): void
     {
-        static::deleting(fn (self $model) => $model->settings()->delete());
+        static::deleting(function (self $model) {
+            $model->settings()->delete();
+        });
     }
 
     public function settings(): MorphMany
