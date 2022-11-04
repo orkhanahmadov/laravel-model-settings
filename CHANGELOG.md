@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 1.4.0 - 2022-11-04
+
+- Added `ModelSettings` contract. Can be used on models that use the `HasSettings` trait for better type checking
+
 ## 1.3.0 - 2022-09-14
 
 - Enabled custom Eloquent Model usage
