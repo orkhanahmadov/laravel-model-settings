@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Orkhanahmadov\ModelSettings\Tests\Models;
 
+use Carbon\CarbonImmutable;
+use DateTimeImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orkhanahmadov\ModelSettings\Enums\Type;
 use Orkhanahmadov\ModelSettings\Tests\TestCase;
@@ -62,6 +64,21 @@ class SettingModelTest extends TestCase
         $false->save();
         $this->assertFalse($false->value);
         $this->assertSame('0', $false->getRawOriginal('value'));
+    }
+
+    public function testDatetimeCast(): void
+    {
+        $setting = new $this->settingModel();
+        $setting->model_type = 'whatever';
+        $setting->model_id = 1;
+        $setting->key = 'whatever';
+        $setting->type = Type::DATETIME;
+        $setting->value = $datetime = CarbonImmutable::parse('2020-01-01 00:00:00');
+        $setting->save();
+
+        $this->assertTrue($datetime->isSameAs($setting->value));
+        $this->assertInstanceOf(DateTimeImmutable::class, $setting->value);
+        $this->assertSame('2020-01-01 00:00:00', $setting->getRawOriginal('value'));
     }
 
     public function testJsonCastFromArray(): void

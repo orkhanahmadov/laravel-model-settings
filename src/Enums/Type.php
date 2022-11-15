@@ -11,4 +11,5 @@ enum Type: string
     case JSON = 'json';
     case ARRAY = 'array';
     case BOOLEAN = 'bool';
+    case DATETIME = 'immutable_datetime';
 }
