@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 1.6.0 - 2023-02-09
+
+- Laravel 10 support
+
 ## 1.5.0 - 2022-11-15
 
 - `DATETIME` type support. Using immutable dates
