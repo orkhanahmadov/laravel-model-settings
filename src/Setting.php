@@ -23,6 +23,6 @@ class Setting
 
     public static function fromModel(SettingModel $model): self
     {
-        return new self(...$model->only(['type', 'key', 'value']));
+        return new self(...$model->only(['type', 'key', 'value'])); // @phpstan-ignore-line
     }
 }

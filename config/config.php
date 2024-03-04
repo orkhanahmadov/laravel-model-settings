@@ -6,6 +6,6 @@ return [
 
     'table_name' => 'model_settings',
 
-    'model' => \Orkhanahmadov\ModelSettings\Models\SettingModel::class,
+    'model' => Orkhanahmadov\ModelSettings\Models\SettingModel::class,
 
 ];
