@@ -76,7 +76,7 @@ class SettingModelTest extends TestCase
         $setting->value = $datetime = CarbonImmutable::parse('2020-01-01 00:00:00');
         $setting->save();
 
-        $this->assertTrue($datetime->isSameAs($setting->value));
+        $this->assertTrue($datetime->eq($setting->value));
         $this->assertInstanceOf(DateTimeImmutable::class, $setting->value);
         $this->assertSame('2020-01-01 00:00:00', $setting->getRawOriginal('value'));
     }
