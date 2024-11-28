@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 1.8.0 - 2024-11-28
+
+- `FLOAT` type support
+
 ## 1.7.0 - 2024-03-04
 
 - Laravel 11 support
