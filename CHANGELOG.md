@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-model-settings` will be documented in this file
 
+## 2.0.0 - 2025-06-18
+
+- Laravel 12 support
+- Drop support for Laravel 8, 9 and 10
+- Drop support for PHP 8.1
+
 ## 1.8.0 - 2024-11-28
 
 - `FLOAT` type support
