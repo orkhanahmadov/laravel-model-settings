@@ -8,6 +8,7 @@ enum Type: string
 {
     case STRING = 'string';
     case INT = 'int';
+    case FLOAT = 'float';
     case JSON = 'json';
     case ARRAY = 'array';
     case BOOLEAN = 'bool';

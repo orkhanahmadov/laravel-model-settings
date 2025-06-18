@@ -29,6 +29,20 @@ class SettingModelTest extends TestCase
         $this->assertSame('1', $setting->getRawOriginal('value'));
     }
 
+    public function testFloatCast(): void
+    {
+        $setting = new $this->settingModel();
+        $setting->model_type = 'whatever';
+        $setting->model_id = 1;
+        $setting->key = 'whatever';
+        $setting->type = Type::FLOAT;
+        $setting->value = '1.23';
+        $setting->save();
+
+        $this->assertSame(1.23, $setting->value);
+        $this->assertSame('1.23', $setting->getRawOriginal('value'));
+    }
+
     public function testStringCast(): void
     {
         $setting = new $this->settingModel();
