@@ -7,5 +7,10 @@ parameters:
 
     level: 9
 
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics
+        -
+            message: '#Trait Orkhanahmadov\\ModelSettings\\Concerns\\HasSettings is used zero times and is not analysed.#'
